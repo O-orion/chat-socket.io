@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      *{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: #898AA6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+li{
+    margin: 5px 0 0 5px;
+    list-style-type: none;
+    font-size: 1.2em;
+}
+
+#messages{
+    width: 50%;
+    height: 50%;
+    background-color: #fdfdfd;
+    display: block;
+    border-radius: 1%;
+    margin-bottom: 5px;
+    overflow: scroll;
+}
+
+#form{
+    width: 50%;
+    height: 6%;
+}
+
+#input{
+    width: 85%;
+    height: 100%;
+
+    border: none;
+    border-radius: 1%;
+    
+    margin-right: 5px;
+    padding: 2px;
+
+    font-size: 1.5em;
+}
+
+#btn{
+    width: 11%;
+    height: 100%;
+    padding: 2px;
+
+    background-color: #377D71;
+    border: none;
+    cursor: pointer;
+
+    color: white;
+}
+
+@media only screen and (max-width: 800px) {
+  li{
+    margin: 5px 0 0 5px;
+    list-style-type: none;
+    font-size: 1.2em;
+}
+
+#messages{
+    width: 90%;
+    height: 50%;
+    background-color: #fdfdfd;
+    display: block;
+    border-radius: 1%;
+    margin-bottom: 5px;
+    overflow: scroll;
+}
+
+#form{
+    width: 90%;
+    height: 6%;
+}
+
+#input{
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    border-radius: 1%;
+    
+    margin-right: 5px;
+    padding: 2px;
+
+    font-size: 1.5em;
+    display: block;
+}
+
+#btn{
+    width: 100%;
+    height: 100%;
+    padding: 2px;
+
+    background-color: #377D71;
+    border: none;
+    cursor: pointer;
+
+    color: white;
+    font-size: 1.5em;
+}
+}
+
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+
+    <form id="form" action="">
+      <input autofocus id="input" autocomplete="on"  placeholder="Digite sua mensagem..."/><button id="btn">ENVIAR</button>
+    </form>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages')
+
+        form.addEventListener('submit', e => {
+          e.preventDefault();
+
+          if(input.value){
+            socket.emit('chat message', input.value);
+            input.value = '';
+          }
+        })
+
+        socket.on('chat message', function(msg){
+          const item = document.createElement('li');
+          item.textContent = msg;
+          messages.appendChild(item);
+          window.scrollTo(0, document.body.scrollHeight)
+          
+        })
+    </script>
+
+  </body>
+</html>
